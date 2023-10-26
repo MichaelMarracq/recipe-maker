@@ -1,32 +1,44 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+// src/components/RecipeDetail.js
 
-const RecipeList = () => {
-  const [recipes, setRecipes] = useState([]);
+import React, { useState, useEffect } from 'react';
+import { getRecipeDetails } from '../api'; // Import the new API function
+
+const RecipeDetail = ({ match }) => {
+  const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("/api/recipes?search=your_search_query") // Replace 'your_search_query'
-      .then((response) => {
-        setRecipes(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+    const recipeId = match.params.id; // Get the recipe ID from the URL
+    const fetchRecipeDetails = async () => {
+      const detailedRecipe = await getRecipeDetails(recipeId);
+      setRecipe(detailedRecipe);
+    };
+
+    fetchRecipeDetails();
+  }, [match.params.id]);
 
   return (
     <div>
-      <h1>Recipe List</h1>
-      <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}>
-            <a href={`/recipes/${recipe.id}`}>{recipe.name}</a>
-          </li>
-        ))}
-      </ul>
+      {recipe ? (
+        <div>
+          <h2>{recipe.name}</h2>
+          <p>{recipe.description}</p>
+          <ul>
+            {recipe.ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul>
+          <p>Preparation Steps:</p>
+          <ol>
+            {recipe.steps.map((step, index) => (
+              <li key={index}>{step}</li>
+            )}
+          </ol>
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 };
 
-export default RecipeList;
+export default RecipeDetail;

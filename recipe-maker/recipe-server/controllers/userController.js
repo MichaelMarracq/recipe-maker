@@ -30,3 +30,8 @@ exports.login = (req, res) => {
   // You can send a success response here, e.g., res.json(req.user)
   res.status(200).json({ message: "Login successful" });
 };
+
+exports.logout = (req, res) => {
+  req.logout(); // Passport.js function to log the user out
+  res.status(200).json({ message: 'Logout successful' });
+};
