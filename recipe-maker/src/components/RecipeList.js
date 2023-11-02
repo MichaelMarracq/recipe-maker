@@ -4,7 +4,7 @@ import { getRecipes } from "../api";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
-  const category = "Seafood"; // Replace with the desired category
+  const category = "Chicken"; // Replace with the desired category
   useEffect(() => {
     const fetchRecipes = async () => {
       const recipeData = await getRecipes(category);
