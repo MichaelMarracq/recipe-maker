@@ -1,38 +1,73 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { getRecipeDetails } from "../api";
+import { useParams } from "react-router-dom"; // Import useParams
 
-const RecipeDetail = (props) => {
+const getIngredients = (recipe) => {
+  const ingredients = [];
+  for (let i = 1; i <= 20; i++) {
+    const ingredient = recipe[`strIngredient${i}`];
+    if (ingredient) {
+      ingredients.push(ingredient);
+    }
+  }
+  return ingredients;
+};
+
+const RecipeDetail = () => {
+  const { id } = useParams(); // Use useParams to access the :id parameter
+
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    const recipeId = props.match.params.id;
-    axios
-      .get(`/api/recipes/${recipeId}`)
-      .then((response) => {
-        setRecipe(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [props.match.params.id]);
+    const fetchRecipeDetails = async () => {
+      console.log(id); // Access the recipe ID from the URL
+      const detailedRecipe = await getRecipeDetails(id);
+      console.log(detailedRecipe);
+      setRecipe(detailedRecipe[0]);
+      console.log(recipe);
+    };
+
+    fetchRecipeDetails();
+  }, [id]);
 
   return (
     <div>
-      <h1>Recipe Detail</h1>
-      {recipe && (
+      {recipe ? (
         <div>
-          <h2>{recipe.name}</h2>
-          <p>{recipe.instructions}</p>
+          <h2>{recipe.strMeal}</h2>
+          <p>Category: {recipe.strCategory}</p>
+          <p>Area: {recipe.strArea}</p>
+          <p>Instructions:</p>
+          <p>{recipe.strInstructions}</p>
+          <p>Ingredients:</p>
+
           <ul>
-            {recipe.ingredients.map((ingredient, index) => (
-              <li key={index}>{ingredient}</li>
+            {getIngredients(recipe).map((ingredient, index) => (
+              <li key={index}>
+                {ingredient}: {recipe[`strMeasure${index + 1}`]}
+              </li>
             ))}
           </ul>
-          <img src={recipe.image_url} alt={recipe.name} />
+
+          <p>Tags: {recipe.strTags}</p>
+
+          <img src={recipe.strMealThumb} alt={recipe.strMeal} />
         </div>
+      ) : (
+        <div>Loading...</div>
       )}
     </div>
   );
 };
 
 export default RecipeDetail;
+
+{
+  /* <ul>
+  {getIngredients(recipe).map((ingredient, index) => (
+    <li key={index}>
+      {ingredient}: {recipe[`strMeasure${index + 1}`]}
+    </li>
+  ))}
+</ul>; */
+}

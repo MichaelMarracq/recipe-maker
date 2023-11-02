@@ -5,10 +5,12 @@ import RecipeDetail from "./components/RecipeDetail";
 import UserRegistration from "./components/UserRegistration";
 import UserLogin from "./components/UserLogin";
 import UserFavorites from "./components/UserFavorites";
+import Navbar from "./components/Navbar"; // Import your Navbar component
 
 const AppRouter = () => {
   return (
     <Router>
+      <Navbar /> {/* Add your Navbar component here */}
       <Routes>
         <Route path="/" element={<RecipeList />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />
