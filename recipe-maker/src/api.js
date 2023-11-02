@@ -10,6 +10,16 @@ const api = axios.create({
 // const category = "Seafood"; // Replace with the desired category
 // const recipes = await getRecipes(category);
 
+export const registerUser = async (userData) => {
+  try {
+    const response = await api.post("/register", userData);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 export const getRecipes = async (category) => {
   try {
     const response = await api.get(`/filter.php?c=${category}`);
