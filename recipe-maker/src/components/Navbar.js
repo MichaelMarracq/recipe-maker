@@ -1,38 +1,50 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { checkUserStatus } from "../api";
+import { useUser } from "../contexts/UserContext"; // Ensure this path is correct
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useUser(); // This is how you consume the context
 
-  const handleLogout = async () => {
-    // Log the user out by making a request to the logout route
-    await fetch("/api/logout", { method: "GET" });
-    // Check if the user is no longer logged in
-    const user = await checkUserStatus();
-    if (!user) {
-      // Redirect the user to the home page or another appropriate location
-      navigate("/");
-    }
+  const handleLogout = () => {
+    setUser(null); // Clear the user from context on logout
+    navigate("/login"); // Redirect to login page
   };
 
   return (
     <div>
       <nav>
+        {/* Display user ID here if user is logged in */}
         <ul>
           <li>
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/recipes">Recipes</Link>
-          </li>
-          <li>
             <Link to="/favorites">Favorites</Link>
           </li>
-          <li>
-            <button onClick={handleLogout}>Logout</button>
-          </li>
+          {user ? (
+            // Show logout and user ID if user is logged in
+            <>
+              <li>
+                Username: {user.username} UserID: {user.id}
+              </li>{" "}
+              {/* Display user ID here */}
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
+            </>
+          ) : (
+            // Show login/register if user is not logged in
+            <>
+              <li>
+                <Link to="/register">Register</Link>
+              </li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
     </div>

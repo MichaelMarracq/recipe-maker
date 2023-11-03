@@ -6,33 +6,28 @@ const UserRegistration = () => {
   const [password, setPassword] = useState("");
   const [registrationMessage, setRegistrationMessage] = useState("");
 
-  const handleRegister = () => {
-    axios
-      .post("/api/register", { username, password })
-      .then((response) => {
-        console.log("Registration successful:", response);
-        setRegistrationMessage("Registration successful. You can now log in.");
-        // Optionally, you can redirect the user to the login page
-        // Example: window.location.href = "/login";
-      })
-      .catch((error) => {
-        console.error("Registration error:", error);
-        if (error.response && error.response.data) {
-          console.error("Server response:", error.response.data);
-          setRegistrationMessage(error.response.data.message);
-        } else {
-          console.error("Unknown error occurred.");
-          setRegistrationMessage(
-            "Registration failed. Please try again later."
-          );
-        }
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    try {
+      console.log("Attempting to register with:", username, password);
+      const response = await axios.post("/api/register", {
+        username,
+        password,
       });
+      console.log("Registration successful:", response.data);
+      setRegistrationMessage("Registration successful. You can now log in.");
+    } catch (error) {
+      console.error("Registration error:", error);
+      setRegistrationMessage(
+        error.message || "Registration failed. Please try again later."
+      );
+    }
   };
 
   return (
     <div>
       <h1>User Registration</h1>
-      <form>
+      <form onSubmit={handleRegister}>
         <input
           type="text"
           placeholder="Username"
@@ -45,7 +40,7 @@ const UserRegistration = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleRegister}>Register</button>
+        <button type="submit">Register</button>
       </form>
       {registrationMessage && <p>{registrationMessage}</p>}
     </div>

@@ -1,26 +1,24 @@
--- Create the database
-CREATE DATABASE recipe_picker;
+-- Drop existing tables if they exist
+DROP TABLE IF EXISTS user_favorites;
+DROP TABLE IF EXISTS recipes;
+DROP TABLE IF EXISTS users;
 
--- Create the users table
+-- Recreate the database (optional, you might not need this if you are not dropping the database)
+-- DROP DATABASE IF EXISTS recipe_picker;
+-- CREATE DATABASE recipe_picker;
+
+-- Assuming you're already connected to the `recipe_picker` database after it's creation
+
+-- Recreate the users table
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   password VARCHAR(100) NOT NULL
 );
 
--- Create the recipes table
-CREATE TABLE recipes (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  instructions TEXT,
-  ingredients TEXT[],
-  image_url VARCHAR(255)
-);
 
--- Create the user_favorites table (junction table)
+-- Recreate the user_favorites table (junction table)
 CREATE TABLE user_favorites (
   user_id INT,
-  recipe_id INT,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (recipe_id) REFERENCES recipes(id)
+  recipe_id INT
 );

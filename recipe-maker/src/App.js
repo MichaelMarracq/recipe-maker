@@ -2,12 +2,15 @@
 
 import React from "react";
 import AppRouter from "./AppRouter";
+import { UserProvider } from "./contexts/UserContext";
 
 function App() {
   return (
-    <div className="App">
-      <AppRouter />
-    </div>
+    <UserProvider>
+      <div className="App">
+        <AppRouter />
+      </div>
+    </UserProvider>
   );
 }
 

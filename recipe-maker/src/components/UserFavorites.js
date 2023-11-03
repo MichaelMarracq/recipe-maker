@@ -1,67 +1,83 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useUser } from "../contexts/UserContext";
+import { getRecipeDetails } from "../api";
 
 const UserFavorites = () => {
   const [favorites, setFavorites] = useState([]);
-  const [recipeIdToAdd, setRecipeIdToAdd] = useState("");
-  const [recipeIdToRemove, setRecipeIdToRemove] = useState("");
+  const [favoriteDetails, setFavoriteDetails] = useState([]);
+  const user = useUser();
 
   useEffect(() => {
-    // Fetch user's favorite recipes from the server
-    axios
-      .get("/api/user/favorites")
-      .then((response) => {
-        setFavorites(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+    if (user.user.id) {
+      axios
+        .get(`/api/getfavorites?userId=${user.user.id}`)
+        .then(async (response) => {
+          setFavorites(response.data);
 
-  const handleAddFavorite = () => {
-    // Send a POST request to add the recipe to favorites
-    axios
-      .post("/api/user/favorites", { recipeId: recipeIdToAdd })
-      .then((response) => {
-        // Handle the response (e.g., update state or show a message)
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+          // Fetch details for all favorite recipes
+          const details = await Promise.all(
+            response.data.map((recipeId) => getRecipeDetails(recipeId))
+          );
+          setFavoriteDetails(details.filter((detail) => detail !== null));
+        })
+        .catch((error) => {
+          console.error("Error fetching favorites:", error);
+        });
+    }
+  }, [user.user]);
 
-  const handleRemoveFavorite = (recipeId) => {
-    // Send a DELETE request to remove the recipe from favorites
-    axios
-      .delete(`/api/user/favorites/${recipeId}`)
-      .then((response) => {
-        // Handle the response (e.g., update state or show a message)
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  // Define some basic inline styles
+  const styles = {
+    container: {
+      padding: "20px",
+      maxWidth: "600px",
+      margin: "0 auto",
+    },
+    listItem: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: "20px",
+      padding: "10px",
+      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    },
+    image: {
+      width: "100px",
+      height: "100px",
+      borderRadius: "50%",
+      marginRight: "15px",
+    },
+    recipeName: {
+      fontWeight: "bold",
+    },
+    recipeDetails: {
+      flex: 1,
+    },
+    link: {
+      textDecoration: "none",
+      color: "#007BFF",
+    },
   };
 
   return (
-    <div>
+    <div style={styles.container}>
       <h1>My Favorites</h1>
-      <div>
-        <label>Add Recipe to Favorites:</label>
-        <input
-          type="text"
-          placeholder="Recipe ID"
-          value={recipeIdToAdd}
-          onChange={(e) => setRecipeIdToAdd(e.target.value)}
-        />
-        <button onClick={handleAddFavorite}>Add to Favorites</button>
-      </div>
       <ul>
-        {favorites.map((recipe) => (
-          <li key={recipe.id}>
-            <a href={`/recipes/${recipe.id}`}>{recipe.name}</a>
-            <button onClick={() => handleRemoveFavorite(recipe.id)}>
-              Remove
-            </button>
+        {favoriteDetails.map((recipe) => (
+          <li key={recipe[0].idMeal} style={styles.listItem}>
+            <img
+              src={recipe[0].strMealThumb}
+              alt={recipe[0].strMeal}
+              style={styles.image}
+            />
+            <div style={styles.recipeDetails}>
+              <h3 style={styles.recipeName}>{recipe[0].strMeal}</h3>
+              <p>{recipe[0].strInstructions.substring(0, 150)}...</p>
+            </div>
+            <a href={`/recipes/${recipe[0].idMeal}`} style={styles.link}>
+              View Recipe
+            </a>
           </li>
         ))}
       </ul>

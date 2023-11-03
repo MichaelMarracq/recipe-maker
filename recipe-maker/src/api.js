@@ -20,50 +20,10 @@ export const getRecipes = async (category) => {
   }
 };
 
-export const checkUserStatus = async () => {
-  try {
-    const response = await api.get("/user");
-    return response.data.user;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
-export const getFavoriteRecipes = async () => {
-  try {
-    const response = await api.get("/user/favorites");
-    return response.data.meals;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
-
 export const getRecipeDetails = async (recipeId) => {
   try {
     const response = await api.get(`/lookup.php?i=${recipeId}`);
     return response.data.meals;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
-export const removeFavoriteRecipe = async (recipeId) => {
-  try {
-    await api.delete(`/user/favorites/${recipeId}`);
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
-
-export const registerUser = async (userData) => {
-  try {
-    const response = await api.post("/register", userData);
-    return response.data;
   } catch (error) {
     console.error(error);
     return null;
