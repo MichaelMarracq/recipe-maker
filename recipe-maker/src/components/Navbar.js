@@ -13,35 +13,79 @@ const Navbar = () => {
   };
 
   return (
-    <div>
-      <nav>
-        {/* Display user ID here if user is logged in */}
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
+    <div
+      style={{
+        marginBottom: "20px",
+        backgroundColor: "#333",
+        padding: "10px 0",
+      }}
+    >
+      <nav
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ul
+          style={{
+            listStyle: "none",
+            display: "flex",
+            justifyContent: "center",
+            padding: "0",
+          }}
+        >
+          <li style={{ margin: "0 15px" }}>
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+              Home
+            </Link>
           </li>
-          <li>
-            <Link to="/favorites">Favorites</Link>
+          <li style={{ margin: "0 15px" }}>
+            <Link
+              to="/favorites"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Favorites
+            </Link>
           </li>
           {user ? (
-            // Show logout and user ID if user is logged in
             <>
-              <li>
-                Username: {user.username} UserID: {user.id}
-              </li>{" "}
-              {/* Display user ID here */}
-              <li>
-                <button onClick={handleLogout}>Logout</button>
+              <li style={{ margin: "0 15px", color: "lightgrey" }}>
+                Username: {user.username}
+              </li>
+              <li style={{ margin: "0 15px" }}>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    padding: "5px 10px",
+                    backgroundColor: "#f44336",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Logout
+                </button>
               </li>
             </>
           ) : (
-            // Show login/register if user is not logged in
             <>
-              <li>
-                <Link to="/register">Register</Link>
+              <li style={{ margin: "0 15px" }}>
+                <Link
+                  to="/register"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  Register
+                </Link>
               </li>
-              <li>
-                <Link to="/login">Login</Link>
+              <li style={{ margin: "0 15px" }}>
+                <Link
+                  to="/login"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  Login
+                </Link>
               </li>
             </>
           )}

@@ -17,12 +17,39 @@ const RecipeList = () => {
   }, [category]);
 
   return (
-    <div>
-      <h2>Recipe List</h2>
-      <ul>
+    <div style={{ textAlign: "center", padding: "20px" }}>
+      <h2 style={{ color: "#ff6347", margin: "20px 0" }}>
+        Bok Bok Chicken Picker
+      </h2>
+      <ul
+        style={{
+          listStyleType: "none",
+          padding: "0",
+          maxWidth: "600px",
+          margin: "0 auto",
+        }}
+      >
         {recipes.map((recipe) => (
-          <li key={recipe.idMeal}>
-            <Link to={`/recipes/${recipe.idMeal}`}>{recipe.strMeal}</Link>
+          <li
+            key={recipe.idMeal}
+            style={{
+              background: "#fff",
+              marginBottom: "10px",
+              padding: "10px",
+              borderRadius: "5px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            }}
+          >
+            <Link
+              to={`/recipes/${recipe.idMeal}`}
+              style={{
+                textDecoration: "none",
+                color: "#333",
+                fontWeight: "bold",
+              }}
+            >
+              {recipe.strMeal}
+            </Link>
           </li>
         ))}
       </ul>

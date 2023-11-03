@@ -68,31 +68,82 @@ const RecipeDetail = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       {recipe ? (
-        <div>
-          <h2>{recipe.strMeal}</h2>
-          {recipe && <button onClick={addToFavorites}>Add to Favorites</button>}
-          <p>Category: {recipe.strCategory}</p>
-          <p>Area: {recipe.strArea}</p>
-          <p>Instructions:</p>
-          <p>{recipe.strInstructions}</p>
-          <p>Ingredients:</p>
-
-          <ul>
+        <div
+          style={{
+            maxWidth: "800px",
+            margin: "0 auto",
+            backgroundColor: "#fff",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <h2
+            style={{
+              textAlign: "center",
+              margin: "0",
+              padding: "0",
+              color: "#333",
+            }}
+          >
+            {recipe.strMeal}
+          </h2>
+          {recipe && (
+            <button
+              onClick={addToFavorites}
+              style={{
+                display: "block",
+                backgroundColor: "#007bff",
+                color: "#fff",
+                padding: "10px 15px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                margin: "10px auto",
+              }}
+            >
+              Add to Favorites
+            </button>
+          )}
+          <p>
+            <strong>Category:</strong> {recipe.strCategory}
+          </p>
+          <p>
+            <strong>Area:</strong> {recipe.strArea}
+          </p>
+          <h3>Instructions:</h3>
+          <p style={{ textAlign: "justify" }}>{recipe.strInstructions}</p>
+          <h3>Ingredients:</h3>
+          <ul style={{ listStyleType: "none", padding: "0" }}>
             {getIngredients(recipe).map((ingredient, index) => (
-              <li key={index}>
+              <li
+                key={index}
+                style={{
+                  background: "#f8f9fa",
+                  margin: "5px 0",
+                  padding: "10px",
+                  borderRadius: "5px",
+                }}
+              >
                 {ingredient}: {recipe[`strMeasure${index + 1}`]}
               </li>
             ))}
           </ul>
-
-          <p>Tags: {recipe.strTags}</p>
-
-          <img src={recipe.strMealThumb} alt={recipe.strMeal} />
+          <p>
+            <strong>Tags:</strong> {recipe.strTags?.split(",").join(", ")}
+          </p>
+          <div style={{ textAlign: "center" }}>
+            <img
+              src={recipe.strMealThumb}
+              alt={recipe.strMeal}
+              style={{ maxWidth: "100%", height: "auto", borderRadius: "8px" }}
+            />
+          </div>
         </div>
       ) : (
-        <div>Loading...</div>
+        <div style={{ textAlign: "center" }}>Loading...</div>
       )}
     </div>
   );
